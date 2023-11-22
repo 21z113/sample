@@ -1,0 +1,42 @@
+Matrix_multiplication:
+
+
+javac -version
+hadoop version
+
+export HADOOP_CLASSPATH=$(hadoop classpath)
+echo $HADOOP_CLASSPATH
+
+1. Loading Input Files to HDFS
+
+hadoop fs -mkdir /Matrix
+hadoop fs -mkdir /Matrix/Input
+hadoop fs -put '/home/hadoop/Desktop/Matrix/input/M.txt' '/home/hadoop/Desktop/Matrix/input/N.txt' /Matrix/Input
+
+ 
+2. Creating JAR Files
+
+cd /home/hadoop/Desktop/Matrix
+
+javac -classpath ${HADOOP_CLASSPATH} -d '/home/hadoop/Desktop/Matrix/tutorial_classes2' '/home/hadoop/Desktop/Matrix/MatrixMultiply.java' '/home/hadoop/Desktop/Matrix/Map.java' '/home/hadoop/Desktop/Matrix/Reduce.java'
+
+jar -cvf firstMatrix.jar -C tutorial_classes2/ .
+
+3. Executing Matrix Multiplication in Hadoop
+
+ hadoop jar '/home/hadoop/Desktop/Matrix/firstMatrix.jar' matrix_multiplication/MatrixMultiply /Matrix1/Input1/ /Matrix1/Output1
+
+
+
+
+ 
+Word_count:
+
+hdfs dfs -mkdir -p /user/hadoop/input
+hdfs dfs -put input.txt /user/hadoop/input/
+
+cd $HADOOP_HOME
+hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-2.6.0.jar wordcount input output
+
+hadoop jar hadoop-mapreduce-examples-2.6.0.jar wordcount input output
+
