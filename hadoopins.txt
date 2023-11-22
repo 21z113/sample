@@ -1,4 +1,6 @@
-
+hive :
+cd $HIVE_HOME/bin
+hive
  
 HADOOP Installation:
 
