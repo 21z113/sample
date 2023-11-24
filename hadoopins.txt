@@ -1,0 +1,173 @@
+cd $HIVE_HOME/bin
+hive
+ 
+HADOOP Installation:
+
+sudo adduser hadoop
+
+sudo apt install openjdk-8-jdk -y
+
+java -version
+
+sudo apt install openssh-server openssh-client -y
+
+sudo su - hadoop
+
+ssh-keygen -t rsa
+
+sudo cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+
+sudo chmod 640 ~/.ssh/authorized_keys
+
+ssh localhost
+
+wget https://downloads.apache.org/hadoop/common/hadoop-3.3.2/hadoop-3.3.2.tar.gz
+
+$ tar -xvzf hadoop-3.3.2.tar.gz
+mv hadoop-3.3.0 hadoop
+
+dirname $(dirname $(readlink -f $(which java)))
+
+$ sudo nano ~/.bashrc
+
+
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export HADOOP_HOME=/home/hadoop/hadoop
+export HADOOP_INSTALL=$HADOOP_HOME
+export HADOOP_MAPRED_HOME=$HADOOP_HOME
+export HADOOP_COMMON_HOME=$HADOOP_HOME
+export HADOOP_HDFS_HOME=$HADOOP_HOME
+export YARN_HOME=$HADOOP_HOME
+export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bin
+export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib/native"
+
+$ source ~/.bashrc
+
+sudo nano $HADOOP_HOME/etc/hadoop/hadoop-env.sh
+
+add:
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+
+which javac
+
+readlink -f /usr/bin/javac
+
+sudo nano $HADOOP_HOME/etc/hadoop/core-site.xml
+
+<configuration>
+ <property>
+                 <name>fs.defaultFS</name>
+                 <value>hdfs://localhost:9000</value>
+         </property>
+ </configuration>
+
+
+sudo nano $HADOOP_HOME/etc/hadoop/hdfs-site.xml
+
+
+<configuration>        <property>
+                <name>dfs.replication</name>
+                <value>1</value>
+        </property>        <property>
+                <name>dfs.name.dir</name>
+                <value>file:///home/hadoop/hadoopdata/hdfs/namenode</value>
+        </property>        <property>
+                <name>dfs.data.dir</name>
+                <value>file:///home/hadoop/hadoopdata/hdfs/datanode</value>
+        </property>
+</configuration>
+
+sudo nano $HADOOP_HOME/etc/hadoop/mapred-site.xml
+
+<configuration> 
+<property> 
+  <name>mapreduce.framework.name</name> 
+  <value>yarn</value> 
+</property> 
+<property>
+  <name>yarn.app.mapreduce.am.env</name>
+  <value>HADOOP_MAPRED_HOME=${HADOOP_HOME}</value>
+</property>
+<property>
+  <name>mapreduce.map.env</name>
+  <value>HADOOP_MAPRED_HOME=${HADOOP_HOME}</value>
+</property>
+<property>
+  <name>mapreduce.reduce.env</name>
+  <value>HADOOP_MAPRED_HOME=${HADOOP_HOME}</value>
+</property>
+</configuration>
+
+
+
+sudo nano $HADOOP_HOME/etc/hadoop/yarn-site.xml
+
+
+<configuration>
+        <property>
+                <name>yarn.nodemanager.aux-services</name>
+                <value>mapreduce_shuffle</value>
+        </property>
+</configuration>
+
+
+
+hdfs namenode -format
+
+
+start-dfs.sh
+
+start-yarn.sh
+
+jps
+http://localhost:9870
+
+http://localhost:9864
+
+http://localhost:8088
+
+
+
+
+
+javac -version
+
+
+hadoop version
+
+
+export HADOOP_CLASSPATH=$(hadoop classpath)
+echo $HADOOP_CLASSPATH
+
+
+1. Loading Input Files to HDFS
+
+
+hadoop fs -mkdir /wc
+hadoop fs -mkdir /wc/Input
+hadoop fs -put '/home/hadoop/Desktop/wc/input.txt'  /wc/Input
+
+ 
+2. Creating JAR Files
+
+cd /home/hadoop/Desktop/wc
+
+
+javac -classpath ${HADOOP_CLASSPATH} -d '/home/hadoop/Desktop/wc/file' '/home/hadoop/Desktop/wc/WordCount.java' 
+
+
+jar -cvf wc.jar -C file/ .
+
+
+3. Executing Matrix Multiplication in Hadoop
+
+ hadoop jar '/home/hadoop/Desktop/wc/wc.jar' WordCount /wc/Input/ /wc/Output
+
+ hadoop jar '/home/hadoop/Desktop/wc/wc.jar' wordcount /wc/Input/ /wc/Output
+
+
+
+
+
+hadoop jar PiValue.jar PiValue /path/to/your/input-file /path/to/your/output-directory
