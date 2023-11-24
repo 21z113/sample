@@ -1,0 +1,9 @@
+application: ae-01-trivial
+version: 1
+runtime: python
+api_version: 1
+handlers:
+- url: /.*
+  #script: index.py
+  upload: index.html
+  static_files: index.html
